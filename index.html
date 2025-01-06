@@ -1,304 +1,217 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Dr. Jufnas OT Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 18px; /* Reduced font size */
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      background-color: #ffffff; /* White background */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      box-sizing: border-box;
-      touch-action: manipulation; /* Disable zooming */
-    }
-    .container {
-      width: 100%;
-      max-width: 950px;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    form {
-      display: block;
-      width: 100%;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-    }
-    h2 {
-      text-align: center;
-    }
-    h3 {
-      text-align: left;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-    .question-set {
-      background-color: #e0f7fa; /* Default color for first set */
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px; /* Gap between question sets */
-    }
-    .question-set.second-set {
-      background-color: #e8eaf6; /* Color for second set */
-    }
-    .question {
-      margin-bottom: 20px; /* Gap between questions */
-      text-align: left;
-      font-size: 20px; /* Increased font size */
-    }
-    label {
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: block;
-    }
-    .radio-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px; /* Reduced gap for radio buttons */
-    }
-    .radio-button {
-      display: inline-block;
-      padding: 8px 8px; /* Reduced padding for smaller size */
-      border: 2px solid #ccc;
-      border-radius: 15px; /* Nice corner radius */
-      background-color: #98fb98; /* Pastel green */
-      cursor: pointer;
-      user-select: none;
-      font-size: 14px; /* Font size set to 14px */
-    }
-    .radio-button.selected {
-      background-color: #f8c8c8; /* Pastel red */
-      border-color: #f58282;
-    }
-    .submit {
-      display: block;
-      width: 100%;
-      padding: 20px;
-      font-size: 30px; /* Increased font size */
-      cursor: pointer;
-      background-color: #440028; /* Changed color */
-      color: white;
-      border: none;
-      border-radius: 15px; /* Nice corner radius */
-      box-shadow: 0 5px #8bc68b;
-    }
-    .submit:hover {
-      background-color: #5c0038;
-    }
-    .submit:active {
-      background-color: #5c0038;
-      box-shadow: 0 2px #5c0038;
-      transform: translateY(2px);
-    }
-    .success-message {
-      display: none;
-      margin-top: 20px;
-      font-size: 18px; /* Reduced font size */
-      color: green;
-    }
-    @media screen and (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      .container {
-        padding: 10px;
-      }
-      form {
-        padding: 10px;
-      }
-      .radio-button {
-        font-size: 14px;
-        padding: 8px 8px; /* Adjusted padding for smaller screens */
-      }
-      input[type="submit"] {
-        font-size: 30px;
-      }
-      .question label {
-        font-size: 20px;
-      }
-    }
-  </style>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derma Leaflet Data</title>
+    <style>
+        body {
+            background-color: #e6f3ff;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 15px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .header {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: center;
+
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #submitBtn {
+            width: 100%;
+            padding: 15px;
+            background-color: #440028;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 25px;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+
+        #submitBtn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(144, 238, 144, 0.8);
+            color: black;
+            padding: 15px 30px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        #formError {
+            display: none;
+            color: red;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #440028;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
+    <div class="header">
+            <h2>Derma Leaflet Registration</h2>
+    </div>
+    <div class="form-container">
+        <div id="formError"></div>
+        <div id="loading" class="loading">Submitting...</div>
+        <form id="dermaForm">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
 
-<div class="container">
-  <h2>Dr. Jufnas OT Form</h2>
-  <form id="otForm">
-    <div class="question-set">
-      <h3>First Set of Data</h3>
-      <div class="question">
-        <label for="date1">1. Date 1:</label>
-        <input type="date" id="date1" name="date1">
-      </div>
-      <div class="question">
-        <label for="normalDutyFrom1">2. Normal Duty From 1:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="08:00 am">08:00 am</div>
-        </div>
-        <input type="hidden" id="normalDutyFrom1" name="normalDutyFrom1">
-      </div>
-      <div class="question">
-        <label for="normalDutyTo1">3. Normal Duty To 1:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="12:00 pm">12:00 pm</div>
-        </div>
-        <input type="hidden" id="normalDutyTo1" name="normalDutyTo1">
-      </div>
-      <div class="question">
-        <label for="extraDutyPlace1">4. Place of Extra Duty 1:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="ward">Ward</div>
-          <div class="radio-button" data-value="Ward/Clinic">Ward/Clinic</div>
-        </div>
-        <input type="hidden" id="extraDutyPlace1" name="extraDutyPlace1">
-      </div>
-      <div class="question">
-        <label for="extraDutyFrom1">5. Extra Duty From 1:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="06:00 am">06:00 am</div>
-          <div class="radio-button" data-value="12:00 pm">12:00 pm</div>
-        </div>
-        <input type="hidden" id="extraDutyFrom1" name="extraDutyFrom1">
-      </div>
-      <div class="question">
-        <label for="extraDutyTo1">6. Extra Duty To 1:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="08:00 am">08:00 am</div>
-          <div class="radio-button" data-value="02:00 pm">02:00 pm</div>
-        </div>
-        <input type="hidden" id="extraDutyTo1" name="extraDutyTo1">
-      </div>
-      <div class="question">
-        <label for="extraHours1">7. Extra Hours 1:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="02 hrs">02 hrs</div>
-        </div>
-        <input type="hidden" id="extraHours1" name="extraHours1">
-      </div>
+            <label for="nic">NIC Number</label>
+            <input type="text" id="nic" name="nic" required>
+
+            <label for="profession">Profession</label>
+            <select id="profession" name="profession" required>
+                <option value="">Select Profession</option>
+                <option value="Medical Officer">Medical Officer</option>
+                <option value="Consultant">Consultant</option>
+                <option value="Medical Student">Medical Student</option>
+                <option value="Nursing Officer">Nursing Officer</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="mobile">Mobile Number</label>
+            <input type="tel" id="mobile" name="mobile" required>
+
+            <label for="email">E-Mail Address</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="androidId">Android ID</label>
+            <a href="https://play.google.com/store/apps/details?id=com.binhdrm.deviceid">Use this app to find your Android ID</a>
+            <input type="text" id="androidId" name="androidId" required>
+
+
+            <button type="submit" id="submitBtn">Submit</button>
+        </form>
     </div>
 
-    <div class="question-set second-set">
-      <h3>Second Set of Data</h3>
-      <div class="question">
-        <label for="date2">1. Date 2:</label>
-        <input type="date" id="date2" name="date2">
-      </div>
-      <div class="question">
-        <label for="normalDutyFrom2">2. Normal Duty From 2:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="02:00 pm">02:00 pm</div>
-        </div>
-        <input type="hidden" id="normalDutyFrom2" name="normalDutyFrom2">
-      </div>
-      <div class="question">
-        <label for="normalDutyTo2">3. Normal Duty To 2:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="04:00 pm">04:00 pm</div>
-        </div>
-        <input type="hidden" id="normalDutyTo2" name="normalDutyTo2">
-      </div>
-      <div class="question">
-        <label for="extraDutyPlace2">4. Place of Extra Duty 2:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="ward">Ward</div>
-          <div class="radio-button" data-value="Ward/Clinic">Ward/Clinic</div>
-        </div>
-        <input type="hidden" id="extraDutyPlace2" name="extraDutyPlace2">
-      </div>
-      <div class="question">
-        <label for="extraDutyFrom2">5. Extra Duty From 2:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="12:00 pm">12:00 pm</div>
-          <div class="radio-button" data-value="04:00 pm">04:00 pm</div>
-          <div class="radio-button" data-value="06:00 pm">06:00 pm</div>
-        </div>
-        <input type="hidden" id="extraDutyFrom2" name="extraDutyFrom2">
-      </div>
-      <div class="question">
-        <label for="extraDutyTo2">6. Extra Duty To 2:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="02:00 pm">02:00 pm</div>
-          <div class="radio-button" data-value="06:00 pm">06:00 pm</div>
-          <div class="radio-button" data-value="08:00 pm">08:00 pm</div>
-          <div class="radio-button" data-value="10:00 pm">10:00 pm</div>
-        </div>
-        <input type="hidden" id="extraDutyTo2" name="extraDutyTo2">
-      </div>
-      <div class="question">
-        <label for="extraHours2">7. Extra Hours 2:</label>
-        <div class="radio-group">
-          <div class="radio-button" data-value="02 hrs">02 hrs</div>
-          <div class="radio-button" data-value="04 hrs">04 hrs</div>
-        </div>
-        <input type="hidden" id="extraHours2" name="extraHours2">
-      </div>
-    </div>
+    <div class="toast" id="toast">Submitted successfully</div>
 
-    <input type="submit" class="submit" value="Submit">
-  </form>
-  <div class="success-message" id="successMessage">Submitted Successfully</div>
-</div>
+    <script>
+        const form = document.getElementById('dermaForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const formError = document.getElementById('formError');
 
-<script>
-document.getElementById("otForm").addEventListener("submit", function(e) {
-  e.preventDefault(); // Prevent default form submission
+        // Store submission status in localStorage
+        function checkPreviousSubmission(email, androidId) {
+            const submissions = JSON.parse(localStorage.getItem('submissions') || '{}');
+            return submissions[email] || submissions[androidId];
+        }
 
-  var data = {
-    date1: document.getElementById("date1").value,
-    normalDutyFrom1: document.querySelector('input[name="normalDutyFrom1"]').value,
-    normalDutyTo1: document.querySelector('input[name="normalDutyTo1"]').value,
-    extraDutyPlace1: document.querySelector('input[name="extraDutyPlace1"]').value,
-    extraDutyFrom1: document.querySelector('input[name="extraDutyFrom1"]').value,
-    extraDutyTo1: document.querySelector('input[name="extraDutyTo1"]').value,
-    extraHours1: document.querySelector('input[name="extraHours1"]').value,
-    date2: document.getElementById("date2").value,
-    normalDutyFrom2: document.querySelector('input[name="normalDutyFrom2"]').value,
-    normalDutyTo2: document.querySelector('input[name="normalDutyTo2"]').value,
-    extraDutyPlace2: document.querySelector('input[name="extraDutyPlace2"]').value,
-    extraDutyFrom2: document.querySelector('input[name="extraDutyFrom2"]').value,
-    extraDutyTo2: document.querySelector('input[name="extraDutyTo2"]').value,
-    extraHours2: document.querySelector('input[name="extraHours2"]').value
-  };
+        function saveSubmission(email, androidId) {
+            const submissions = JSON.parse(localStorage.getItem('submissions') || '{}');
+            submissions[email] = true;
+            submissions[androidId] = true;
+            localStorage.setItem('submissions', JSON.stringify(submissions));
+        }
 
-  fetch('https://script.google.com/macros/s/AKfycbw3bO6kikWmtyUp23C2k6uOwgx-6FiT9DSynoSSf34pr5j9myjVKbTchh6XNd3_aMRG/exec', {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(response => response.json())
-    .then(data => {
-      console.log(data);
-      // Clear the form fields
-      document.getElementById("otForm").reset();
-      // Show success message
-      document.getElementById("successMessage").style.display = "block";
-    })
-    .catch(error => console.error('Error:', error));
-});
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-// Radio button functionality
-document.querySelectorAll('.radio-group').forEach(group => {
-  group.addEventListener('click', function(e) {
-    if (e.target.classList.contains('radio-button')) {
-      let buttons = group.querySelectorAll('.radio-button');
-      buttons.forEach(button => button.classList.remove('selected'));
-      e.target.classList.add('selected');
-      group.nextElementSibling.value = e.target.getAttribute('data-value');
-    }
-  });
-});
-</script>
+            const email = document.getElementById('email').value;
+            const androidId = document.getElementById('androidId').value;
 
+            // Check local storage first
+            if (checkPreviousSubmission(email, androidId)) {
+                formError.textContent = 'You have already submitted the form with this email or device.';
+                formError.style.display = 'block';
+                return;
+            }
+
+            // Disable form and show loading
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            formError.style.display = 'none';
+
+            // Replace with your Google Apps Script Web App URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxets2eS1jPmDOgTjsGHf-RVVkYFPYAdqYMFP0q5y_GNiA8iRjogt2K23c9KVDAO7BTKA/exec';
+
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: new FormData(this)
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'already_submitted') {
+                    formError.textContent = data.message;
+                    formError.style.display = 'block';
+                } else if (data.status === 'success') {
+                    // Save to localStorage
+                    saveSubmission(email, androidId);
+
+                    // Show success toast
+                    const toast = document.getElementById('toast');
+                    toast.style.display = 'block';
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 3000);
+
+                    // Clear form
+                    form.reset();
+                }
+            } catch (error) {
+                console.error('Error!', error);
+                formError.textContent = 'An error occurred. Please try again.';
+                formError.style.display = 'block';
+            } finally {
+                // Re-enable form and hide loading
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
